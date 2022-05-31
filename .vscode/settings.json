@@ -7,7 +7,7 @@
         "activityBar.inactiveForeground": "#15202b99",
         "activityBarBadge.background": "#fa45d4",
         "activityBarBadge.foreground": "#15202b",
-        "sash.hoverBorder": "##61fb70",
+        "sash.hoverBorder": "#61fb70",
         "statusBar.background": "#61fb70",
         "statusBar.foreground": "#15202b",
         "statusBarItem.hoverBackground": "#61fb70",
