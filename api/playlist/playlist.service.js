@@ -93,7 +93,7 @@ async function add(playlist) {
 async function addMany(playlists) {
     try{
         const collection = await dbService.getCollection('playlist')
-        console.log(playlists, 'playlists')
+
         await collection.insertMany(playlists)
         return playlists
     } catch (err) {

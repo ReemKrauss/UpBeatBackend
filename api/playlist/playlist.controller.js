@@ -16,7 +16,6 @@ async function getPlaylists(req, res) {
         const filterBy = {
             tags: req.query?.tags || [],
         }
-        console.log(req.query.filterBy)
         const playlists = await playlistService.query(filterBy)
         res.send(playlists)
     } catch (err) {
@@ -58,7 +57,6 @@ async function addPlaylist(req, res) {
 }
 
 async function addDemo(req, res) {
-    console.log('hello')
     try {
         const playlists = req.body
         const savedPlaylists = await playlistService.addMany(playlists)
