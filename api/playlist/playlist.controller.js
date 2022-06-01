@@ -12,6 +12,7 @@ async function getPlaylist(req, res) {
 }
 
 async function getPlaylists(req, res) {
+    console.log('hello getplay')
     try {
         const filterBy = {
             tags: req.query?.tags || [],

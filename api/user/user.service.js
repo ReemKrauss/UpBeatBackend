@@ -128,5 +128,3 @@ function _buildCriteria(filterBy) {
 }
 
 
-
-
