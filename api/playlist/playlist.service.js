@@ -55,7 +55,7 @@ async function update(playlist) {
             name: playlist.name,
             description: playlist.description,
             imgUrl: playlist.imgUrl,
-            tags: playlist.labels,
+            tags: playlist.tags,
             createdAt: playlist.createdAt,
             createdBy: playlist.createdBy,
             songs: playlist.songs 
