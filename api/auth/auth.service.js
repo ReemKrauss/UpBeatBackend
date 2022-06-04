@@ -39,7 +39,7 @@ async function signup({username, password, fullname, imgUrl, likedSongs=[]}) {
 
 
 function getLoginToken(user) {
-    return cryptr.encrypt(JSON.stringify(user))    
+    return cryptr.encrypt(JSON.stringify({username: user.username, _id: user._id}))    
 }
 
 function validateToken(loginToken) {
