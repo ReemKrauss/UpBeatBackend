@@ -1,5 +1,3 @@
-const { emit } = require('nodemon');
-const asyncLocalStorage = require('./als.service');
 const logger = require('./logger.service');
 
 var gIo = null
