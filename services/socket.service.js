@@ -1,4 +1,6 @@
-const logger = require('./logger.service')
+const { emit } = require('nodemon');
+const asyncLocalStorage = require('./als.service');
+const logger = require('./logger.service');
 
 var gIo = null
 
@@ -13,8 +15,8 @@ function setupSocketAPI(http) {
         socket.on('disconnect', socket => {
             logger.info(`Socket disconnected [id: ${socket.id}]`)
         })
-        socket.on('chat-set-topic', topic => {
-            if (socket.myTopic === topic) return
+        socket.on('chat topic', topic => {
+            if (socket.myTopic === topic) return;
             if (socket.myTopic) {
                 socket.leave(socket.myTopic)
                 logger.info(`Socket is leaving topic ${socket.myTopic} [id: ${socket.id}]`)
@@ -22,12 +24,12 @@ function setupSocketAPI(http) {
             socket.join(topic)
             socket.myTopic = topic
         })
-        socket.on('chat-send-msg', msg => {
+        socket.on('chat newMsg', msg => {
             logger.info(`New chat msg from socket [id: ${socket.id}], emitting to topic ${socket.myTopic}`)
             // emits to all sockets:
             // gIo.emit('chat addMsg', msg)
             // emits only to sockets in the same room
-            gIo.to(socket.myTopic).emit('chat-add-msg', msg)
+            gIo.to(socket.myTopic).emit('chat addMsg', msg)
         })
         socket.on('user-watch', userId => {
             logger.info(`user-watch from socket [id: ${socket.id}], on user ${userId}`)
@@ -36,11 +38,19 @@ function setupSocketAPI(http) {
         })
         socket.on('set-user-socket', userId => {
             logger.info(`Setting socket.userId = ${userId} for socket [id: ${socket.id}]`)
+            if(socket.userId) delete socket.userId
             socket.userId = userId
         })
         socket.on('unset-user-socket', () => {
             logger.info(`Removing socket.userId for socket [id: ${socket.id}]`)
             delete socket.userId
+        })
+        socket.on('playlist-watch' , (playlistId) => {
+            logger.info(`playlist-watch from socket [id: ${socket.id}], on playlist ${playlistId}`)
+            socket.join('watching:' + playlistId)
+        })
+        socket.on('playlist-update', (playlist) => {
+            gIo.to('watching' + playlistId).emit('playlist-update')
         })
 
     })
@@ -59,7 +69,7 @@ async function emitToUser({ type, data, userId }) {
         socket.emit(type, data)
     }else {
         logger.info(`No active socket for user: ${userId}`)
-        // _printSockets()
+        // _printSockets();
     }
 }
 
@@ -86,12 +96,12 @@ async function broadcast({ type, data, room = null, userId }) {
 async function _getUserSocket(userId) {
     const sockets = await _getAllSockets()
     const socket = sockets.find(s => s.userId === userId)
-    return socket
+    return socket;
 }
 async function _getAllSockets() {
     // return all Socket instances
-    const sockets = await gIo.fetchSockets()
-    return sockets
+    const sockets = await gIo.fetchSockets();
+    return sockets;
 }
 
 async function _printSockets() {
