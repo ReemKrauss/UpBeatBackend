@@ -47,10 +47,11 @@ function setupSocketAPI(http) {
         })
         socket.on('playlist-watch' , (playlistId) => {
             logger.info(`playlist-watch from socket [id: ${socket.id}], on playlist ${playlistId}`)
-            socket.join('watching:' + playlistId)
+            socket.join(playlistId)
+            socket.curPlaylist = playlistId
         })
         socket.on('playlist-update', (playlist) => {
-            gIo.to('watching' + playlistId).emit('playlist-update')
+            socket.broadcast.to(socket.curPlaylist).emit('playlist-update',playlist)
         })
 
     })
